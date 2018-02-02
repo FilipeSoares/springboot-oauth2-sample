@@ -1,0 +1,6 @@
+br\com\fo2app\springboot\app\Application.class
+br\com\fo2app\springboot\configuration\ResourceServerConfig.class
+br\com\fo2app\springboot\rest\MainController.class
+br\com\fo2app\springboot\configuration\JacksonConfiguration.class
+br\com\fo2app\springboot\configuration\AuthorizationServerConfig.class
+br\com\fo2app\springboot\configuration\WebSecurityConfig.class
