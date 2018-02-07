@@ -13,7 +13,7 @@ public class MainController {
         return new ResponseEntity<String>("Welcome to Rest API!", HttpStatus.OK);
     }
     
-    @RequestMapping("/service")
+    @RequestMapping("/services")
     public ResponseEntity<String> login() {
         return new ResponseEntity<String>("Welcome to Service Page!", HttpStatus.OK);
     }

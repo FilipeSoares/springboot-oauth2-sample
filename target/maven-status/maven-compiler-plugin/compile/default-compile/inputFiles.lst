@@ -1,6 +1,6 @@
-C:\Users\filipe.soares\git\springboot-oauth2-sample\src\main\java\br\com\fo2app\springboot\configuration\JacksonConfiguration.java
-C:\Users\filipe.soares\git\springboot-oauth2-sample\src\main\java\br\com\fo2app\springboot\configuration\ResourceServerConfig.java
-C:\Users\filipe.soares\git\springboot-oauth2-sample\src\main\java\br\com\fo2app\springboot\rest\MainController.java
-C:\Users\filipe.soares\git\springboot-oauth2-sample\src\main\java\br\com\fo2app\springboot\app\Application.java
-C:\Users\filipe.soares\git\springboot-oauth2-sample\src\main\java\br\com\fo2app\springboot\configuration\AuthorizationServerConfig.java
-C:\Users\filipe.soares\git\springboot-oauth2-sample\src\main\java\br\com\fo2app\springboot\configuration\WebSecurityConfig.java
+/home/filipe/Git/springboot-oauth2-sample/src/main/java/br/com/fo2app/springboot/configuration/WebSecurityConfig.java
+/home/filipe/Git/springboot-oauth2-sample/src/main/java/br/com/fo2app/springboot/configuration/AuthorizationServerConfig.java
+/home/filipe/Git/springboot-oauth2-sample/src/main/java/br/com/fo2app/springboot/rest/MainController.java
+/home/filipe/Git/springboot-oauth2-sample/src/main/java/br/com/fo2app/springboot/configuration/ResourceServerConfig.java
+/home/filipe/Git/springboot-oauth2-sample/src/main/java/br/com/fo2app/springboot/app/Application.java
+/home/filipe/Git/springboot-oauth2-sample/src/main/java/br/com/fo2app/springboot/configuration/JacksonConfiguration.java
