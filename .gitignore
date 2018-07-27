@@ -1,6 +1,9 @@
 /target/
 /target/*
+/target/**
 target/*
 target/
+target/**
 .classpath
 .classpath/*
+.classpath/**
