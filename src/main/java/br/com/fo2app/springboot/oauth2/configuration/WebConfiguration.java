@@ -11,7 +11,7 @@ public class WebConfiguration {
 	@Bean
 	ServletRegistrationBean h2servletRegistration() {
 		ServletRegistrationBean registrationBean = new ServletRegistrationBean(new WebServlet());
-		registrationBean.addUrlMappings("/h2/*");
+		registrationBean.addUrlMappings("/_api/h2/*");
 		return registrationBean;
 	}
 	
