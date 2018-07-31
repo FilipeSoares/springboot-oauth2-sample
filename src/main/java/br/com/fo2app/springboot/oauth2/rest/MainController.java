@@ -10,7 +10,7 @@ public class MainController {
     
     @GetMapping("/")
     public ResponseEntity<String> index() {
-        return new ResponseEntity<String>("Welcome to Rest API!", HttpStatus.OK);
+        return new ResponseEntity<String>("SpringBoot Oauth2 Sample - 1.0.0", HttpStatus.OK);
     }
     
 }
