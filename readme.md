@@ -18,16 +18,13 @@ File > Import > Existing Maven Project
 
 * **mvn install**
 
-With Maven...
-	
-
 ## Tests
 
-Execute tests with JUnit  
+* **mvn verify**  
 
 ## Deploy
 
-* **mvn clean spring-boot:run**
+* **mvn spring-boot:run**
 
 To deploy with maven
 
@@ -37,9 +34,9 @@ Swagger: [http://localhost:4200/_api/swagger-ui.html](http://localhost:4200/_api
 
 ## Architecture
 
-* [SpringBoot](https://docs.spring.io/spring-boot/docs/1.5.8.RELEASE/reference/htmlsingle/)
-* [Maven](https://maven.apache.org/) - Injeção de Dependências
-* [Swagger2](https://swagger.io/docs/) - Documentação da API
+* [SpringBoot](https://docs.spring.io/spring-boot/docs/1.5.8.RELEASE/reference/htmlsingle/) - SpringBoot
+* [Maven](https://maven.apache.org/) - Dependency Injection
+* [Swagger2](https://swagger.io/docs/) - Api Docs
 
 ## Authors
 
