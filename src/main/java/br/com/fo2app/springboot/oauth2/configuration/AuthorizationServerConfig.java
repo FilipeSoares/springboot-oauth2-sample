@@ -1,63 +1,91 @@
 package br.com.fo2app.springboot.oauth2.configuration;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
 @Configuration
 @EnableAuthorizationServer
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 	
 	@Autowired
 	private TokenStore tokenStore;
 	
 	@Autowired
+	private JwtAccessTokenConverter accessTokenConverter;
+
+	@Autowired
 	private AuthenticationManager authenticationManager;
 	
-	@Value("${security.client-id}")
-	private String clientId;
-
-	@Value("${security.client-secret}")
-	private String clientSecret;
-
-	@Value("${security.grant-type}")
-	private String grantType;
-
-	@Value("${security.scope-read}")
-	private String scopeRead;
-
-	@Value("${security.scope-write}")
-	private String scopeWrite = "write";
-
-	@Value("${security.resource-ids}")
-	private String resourceIds;
+	@Autowired
+	@Qualifier("userService")
+	private UserDetailsService userDetailsService;
 	
-	@Value("${security.accessTokenValiditySeconds}")
-	private String accessTokenValiditySeconds;
+	static final String INTERNAL_CLIENT_ID = "internal-client-id";
+	static final String EXTERNAL_CLIENT_ID = "external-client-id";
+	
+	static final String INTERNAL_CLIENT_SECRET = "$2y$12$JFkoUKnuft.g5bQKhEuyo.8.ZkqrAX3PZpedCdFIu4Y9/ZNhsHt36";
+	
+	static final String GRANT_TYPE_PASSWORD = "password";
+	static final String AUTHORIZATION_CODE = "authorization_code";
+    static final String REFRESH_TOKEN = "refresh_token";
+    static final String IMPLICIT = "implicit";
+	static final String SCOPE_READ = "read";
+	static final String SCOPE_WRITE = "write";
+	static final String RESOURCE_ID = "br.com.fo2app.springboot.oauth2";
+	static final int TOKEN_VALIDATION = 3600;
+	static final String[] AUTHORITIES = {"ROLE_TRUSTED_CLIENT"};
 	
 	@Override
 	public void configure(final ClientDetailsServiceConfigurer configurer) throws Exception {
 		configurer
 			.inMemory()
-			.withClient(clientId)
-			.secret(clientSecret)
-			.authorizedGrantTypes(grantType)
-		 	.scopes(scopeRead, scopeWrite)
-		 	.resourceIds(resourceIds)
-		 	.accessTokenValiditySeconds(Integer.valueOf(accessTokenValiditySeconds));		 	
+			.withClient(INTERNAL_CLIENT_ID)
+			.secret(INTERNAL_CLIENT_SECRET)
+			.authorizedGrantTypes(AUTHORIZATION_CODE, REFRESH_TOKEN, IMPLICIT)
+		 	.scopes(SCOPE_READ, SCOPE_WRITE)
+		 	.resourceIds(RESOURCE_ID)
+		 	.accessTokenValiditySeconds(TOKEN_VALIDATION)
+		 	.authorities(AUTHORITIES)
+		 	.autoApprove(true)
+		 	.redirectUris("http://localhost:4200")
+		 	.and()
+		 	.withClient(EXTERNAL_CLIENT_ID)
+			.authorizedGrantTypes(AUTHORIZATION_CODE, IMPLICIT)
+		 	.scopes(SCOPE_READ, SCOPE_WRITE)
+		 	.autoApprove(true)
+		 	.redirectUris("http://localhost:4200");
 	}
 
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-		endpoints
-			.tokenStore(tokenStore)
-			.authenticationManager(authenticationManager);
-	}	
+		TokenEnhancerChain enhancerChain = new TokenEnhancerChain();
+		enhancerChain.setTokenEnhancers(Arrays.asList(accessTokenConverter));
+		endpoints.tokenStore(tokenStore).accessTokenConverter(accessTokenConverter).tokenEnhancer(enhancerChain)
+				.authenticationManager(authenticationManager).userDetailsService(userDetailsService);
+	}
+	
+	@Override
+	public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
+		oauthServer
+			.tokenKeyAccess("isAnonymous() || permitAll()")
+			.checkTokenAccess("hasAuthority('ROLE_TRUSTED_CLIENT')")
+			.passwordEncoder(new BCryptPasswordEncoder());
+	}
 
 }
