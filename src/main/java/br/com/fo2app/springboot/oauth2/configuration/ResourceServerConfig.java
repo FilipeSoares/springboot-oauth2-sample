@@ -30,7 +30,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	public void configure(HttpSecurity http) throws Exception {
 		http
 			.requestMatchers().and().authorizeRequests()
-			.antMatchers("/users", "/api-info", "/info", "/actuator/**", "/swagger-ui.html", "/v2/api-docs/**", "/webjars/**", "/swagger-resources/**").permitAll()
+			.antMatchers("/api-info", "/info", "/actuator/**", "/swagger-ui.html", "/v2/api-docs/**", "/webjars/**", "/swagger-resources/**").permitAll()
 			.anyRequest().authenticated().and()
 			.exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler());
 		

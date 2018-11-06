@@ -39,7 +39,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	static final String INTERNAL_CLIENT_ID = "internal-client-id";
 	static final String EXTERNAL_CLIENT_ID = "external-client-id";
 	
-	static final String INTERNAL_CLIENT_SECRET = "$2y$12$JFkoUKnuft.g5bQKhEuyo.8.ZkqrAX3PZpedCdFIu4Y9/ZNhsHt36";
+	static final String INTERNAL_CLIENT_SECRET = "$2a$10$ctjezj79XwFWuDx4UMYKguTMYjbv9zF6HaZrBayHLd.H7m0.EDos6";
 	
 	static final String GRANT_TYPE_PASSWORD = "password";
 	static final String AUTHORIZATION_CODE = "authorization_code";
@@ -57,7 +57,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 			.inMemory()
 			.withClient(INTERNAL_CLIENT_ID)
 			.secret(INTERNAL_CLIENT_SECRET)
-			.authorizedGrantTypes(AUTHORIZATION_CODE, REFRESH_TOKEN, IMPLICIT)
+			.authorizedGrantTypes(AUTHORIZATION_CODE, REFRESH_TOKEN, IMPLICIT, GRANT_TYPE_PASSWORD)
 		 	.scopes(SCOPE_READ, SCOPE_WRITE)
 		 	.resourceIds(RESOURCE_ID)
 		 	.accessTokenValiditySeconds(TOKEN_VALIDATION)
