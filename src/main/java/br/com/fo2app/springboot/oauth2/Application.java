@@ -24,8 +24,8 @@ public class Application {
 
 		@Override
 		public void run(ApplicationArguments args) throws Exception {
-			userRepository.save(new User("admin", encoder.encode("password")));
-			userRepository.save(new User("user", encoder.encode("password")));
+			userRepository.save(new User("user " + System.currentTimeMillis(), encoder.encode("password")));
+			userRepository.save(new User("user " + System.currentTimeMillis(), encoder.encode("password")));
 		}
 	}
 
