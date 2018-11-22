@@ -43,8 +43,8 @@ public class UserControllerTest {
 	private HttpMessageConverter mappingJackson2HttpMessageConverter;
 	
 	protected static String authorization;
-	protected static final String clientId = "BFBE45C41E29EFB5FF27988644FAEA5F";
-	protected static final String clientSecret = "F0E4A978866280C0E7D911AC2490EDDB12E2D4399A11833A326C7C2D553DC51B";
+	protected static final String clientId = "client-id";
+	protected static final String clientSecret = "client-secret";
 	protected HttpHeaders headers = new HttpHeaders();
 	
 	protected static String token;
