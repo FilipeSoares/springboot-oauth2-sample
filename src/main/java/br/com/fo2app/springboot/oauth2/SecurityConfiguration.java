@@ -1,4 +1,4 @@
-package br.com.fo2app.springboot.oauth2.configuration;
+package br.com.fo2app.springboot.oauth2;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -43,9 +43,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
-			.authorizeRequests().antMatchers("/users/**","/_api/users/**" ).authenticated().and()
-			.authorizeRequests().antMatchers("/_api/h2/**", "/_api").permitAll().and()
-			.authorizeRequests().antMatchers("/_api/h2/**", "/_api").anonymous();
+			.authorizeRequests().antMatchers("/users/**").authenticated().and()
+			.authorizeRequests().antMatchers("/h2/**", "/info").permitAll().and()
+			.authorizeRequests().antMatchers("/h2/**", "/info").anonymous();
 		
 		http.csrf().disable();		
 		http.headers().frameOptions().disable();
@@ -59,6 +59,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Bean
 	public FilterRegistrationBean corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

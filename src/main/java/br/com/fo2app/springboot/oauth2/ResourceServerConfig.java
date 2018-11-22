@@ -1,5 +1,6 @@
-package br.com.fo2app.springboot.oauth2.configuration;
+package br.com.fo2app.springboot.oauth2;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -17,13 +18,16 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	
-	private static final String signingKey = "MaYzkSjmkzPC57L";
-	private static final String RESOURCE_ID = "br.com.fo2app.springboot.oauth2";
+	@Value("${config.signing.key}")
+	private String signingKey;
+	
+	@Value("${config.resource.id}")
+	private String resourceId;
 
 	@Override
 	public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
 		resources
-			.resourceId(RESOURCE_ID)
+			.resourceId(resourceId)
 			.stateless(false)
 			.tokenServices(tokenServices());
 	}

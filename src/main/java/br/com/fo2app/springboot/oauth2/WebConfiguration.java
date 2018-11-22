@@ -1,4 +1,4 @@
-package br.com.fo2app.springboot.oauth2.configuration;
+package br.com.fo2app.springboot.oauth2;
 
 import org.h2.server.web.WebServlet;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;

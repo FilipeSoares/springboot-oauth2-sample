@@ -1,15 +1,17 @@
-package br.com.fo2app.springboot.oauth2.configuration;
+package br.com.fo2app.springboot.oauth2;
 
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -25,7 +27,11 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 	
-	private static final String signingKey = "MaYzkSjmkzPC57L";	
+	@Value("${config.signing.key}")
+	private String signingKey;
+	
+	@Value("${config.resource.id}")
+	private String resourceId;
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -34,18 +40,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Qualifier("userService")
 	private UserDetailsService userDetailsService;
 	
-	static final String INTERNAL_CLIENT_ID = "internal-client-id";
-	static final String EXTERNAL_CLIENT_ID = "external-client-id";
-	
-	static final String INTERNAL_CLIENT_SECRET = "$2a$10$ctjezj79XwFWuDx4UMYKguTMYjbv9zF6HaZrBayHLd.H7m0.EDos6";
-	
 	static final String GRANT_TYPE_PASSWORD = "password";
 	static final String AUTHORIZATION_CODE = "authorization_code";
     static final String REFRESH_TOKEN = "refresh_token";
     static final String IMPLICIT = "implicit";
 	static final String SCOPE_READ = "read";
 	static final String SCOPE_WRITE = "write";
-	static final String RESOURCE_ID = "br.com.fo2app.springboot.oauth2";
 	static final int TOKEN_VALIDATION = 3600;
 	static final String[] AUTHORITIES = {"ROLE_TRUSTED_CLIENT"};
 	
@@ -53,21 +53,13 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	public void configure(final ClientDetailsServiceConfigurer configurer) throws Exception {
 		configurer
 			.inMemory()
-			.withClient(INTERNAL_CLIENT_ID)
-			.secret(INTERNAL_CLIENT_SECRET)
+			.withClient("client-id")
+			.secret(passwordEncoder().encode("client-secret"))
 			.authorizedGrantTypes(AUTHORIZATION_CODE, REFRESH_TOKEN, IMPLICIT, GRANT_TYPE_PASSWORD)
 		 	.scopes(SCOPE_READ, SCOPE_WRITE)
-		 	.resourceIds(RESOURCE_ID)
+		 	.resourceIds(resourceId)
 		 	.accessTokenValiditySeconds(TOKEN_VALIDATION)
-		 	.authorities(AUTHORITIES)
-		 	.autoApprove(true)
-		 	.redirectUris("http://localhost:4200")
-		 	.and()
-		 	.withClient(EXTERNAL_CLIENT_ID)
-			.authorizedGrantTypes(AUTHORIZATION_CODE, IMPLICIT)
-		 	.scopes(SCOPE_READ, SCOPE_WRITE)
-		 	.autoApprove(true)
-		 	.redirectUris("http://localhost:4200");
+		 	.authorities(AUTHORITIES);
 	}
 
 	@Override
@@ -90,7 +82,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		oauthServer
 			.tokenKeyAccess("isAnonymous() || permitAll()")
 			.checkTokenAccess("hasAuthority('ROLE_TRUSTED_CLIENT')")
-			.passwordEncoder(new BCryptPasswordEncoder());
+			.passwordEncoder(passwordEncoder());
 	}
 	
 	@Bean
@@ -112,6 +104,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		defaultTokenServices.setTokenStore(tokenStore());
 		defaultTokenServices.setSupportRefreshToken(true);
 		return defaultTokenServices;
+	}
+	
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 
 }
